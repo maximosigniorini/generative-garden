@@ -2,6 +2,13 @@ function Branch(begin, end) {
     this.begin = begin;
     this.end = end;
     this.finished = false;
+    this.porcentaje = 0.67;
+
+    this.grow = function(){
+        if(this.porcentaje > 0){
+            this.porcentaje -= 0.01
+        }
+    }
 
     this.jitter = function () {
         this.end.x += random(-1, 1);
@@ -16,7 +23,7 @@ function Branch(begin, end) {
     this.branchA = function () {
         let dir = p5.Vector.sub(this.end, this.begin);
         dir.rotate(PI / 6);
-        dir.mult(0.67);
+        dir.mult(this.porcentaje);
         let newEnd = p5.Vector.add(this.end, dir);
         let b = new Branch(this.end, newEnd);
         return b;
@@ -25,7 +32,7 @@ function Branch(begin, end) {
     this.branchB = function () {
         let dir = p5.Vector.sub(this.end, this.begin);
         dir.rotate(-PI / 4);
-        dir.mult(0.67);
+        dir.mult(this.porcentaje);
         let newEnd = p5.Vector.add(this.end, dir);
         let b = new Branch(this.end, newEnd);
         return b;
