@@ -1,49 +1,33 @@
-let tree = [];
-let leaves = [];
-
-let count = 0;
+let angle = 0;
+let grow = 0;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  let a = createVector(width / 2, height);
-  let b = createVector(width / 2, height - 100);
-  let root = new Branch(a, b);
-
-  tree[0] = root;
-}
-
-function mousePressed() {
-  for (let i = tree.length - 1; i >= 0; i--) {
-    if (!tree[i].finished) {
-      tree.push(tree[i].branchA());
-      tree.push(tree[i].branchB());
-    }
-    tree[i].finished = true;
-  }
-  count++;
-
-  if (count === 6) {
-    for (let i = 0; i < tree.length; i++) {
-      if (!tree[i].finished) {
-        let leaf = tree[i].end.copy();
-        leaves.push(leaf);
-      }
-    }
-  }
+    createCanvas(windowWidth, windowHeight);
+    angle = random(0, TWO_PI)
 }
 
 function draw() {
-  clear()
+    clear()
+    stroke(255);
+    translate(width/2, height);
+    branch(200);
 
-  for (let i = 0; i < tree.length; i++) {
-    tree[i].show();
-    //tree[i].jitter();
-  }
+    if(grow < 0.7){
+        grow+= 0.0001
+    }
+}
 
-  for (let i = 0; i < leaves.length; i++) {
-    fill(255, 0, 100, 100);
-    noStroke();
-    ellipse(leaves[i].x, leaves[i].y, 8, 8);
-    leaves[i].y += random(0, 2);
-  }
+function branch(len) {
+    line(0, 0, 0, -len);
+    translate(0, -len);
+    if (len > 4) {
+        push();
+        rotate(angle);
+        branch(len * grow);
+        pop();
+        push();
+        rotate(-angle);
+        branch(len * grow);
+        pop();
+    }
 }
